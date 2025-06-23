@@ -5,10 +5,24 @@
 // 4. maka akan muncul output "hello world!" di terminal
 
 function cetakNama(nama) {
-  console.log(`Hallo, ${nama}`);
+  return `Hallo, ${nama}`;
 }
 
-// cetakNama("Azhar"); // kalo disimpen di module yang sama lalu di panggil di module lain gini bisa dieksekusi  di tempat kita require();
+const PI = 3.14;
+const mahasiswa = {
+  nama: "Budy Hartono",
+  sayHello() {
+    return `Hallo Mahasiswa ini namanya ${this.nama}`;
+  },
+};
 
-// supaya fungsi cetakNama bisa dieksekusi atau di panggil di luar module lakukan ini
-module.exports = cetakNama;
+class Orang {
+  constructor() {
+    console.log("object orang telah dibuat!");
+  }
+}
+
+// kalo kita punya lebih dari satu potong kode untuk di eksport pake object
+// module.exports = { cetakNama: cetakNama, PI: PI };
+// atau lebih singkat karena biasanya nama property dan apa yg kita kirim / export itu sama kita bisa lakukan ini
+module.exports = { cetak: cetakNama, PI, mahasiswa, Orang }; // nama property adalah nama yang dipakai saat di module lain
