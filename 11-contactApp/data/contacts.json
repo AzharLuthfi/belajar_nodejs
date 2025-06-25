@@ -1,1 +1,17 @@
-[{"nama":"caca","email":"ca@mail.com","noHp":"081876523425"},{"nama":"azhar","email":"zar@mail.com","noHp":"081876523346"},{"nama":"bagus","email":"ba@mail.com","noHp":"081863523346"}]
+[
+  {
+    "nama": "caca",
+    "email": "ca@mail.com",
+    "noHp": "081876523425"
+  },
+  {
+    "nama": "bagus",
+    "email": "ba@mail.com",
+    "noHp": "081863523346"
+  },
+  {
+    "nama": "daud",
+    "email": "da@mail.com",
+    "noHp": "081828364736"
+  }
+]
