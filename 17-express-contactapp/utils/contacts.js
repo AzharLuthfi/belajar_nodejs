@@ -27,4 +27,22 @@ function findContact(nama) {
   return contact;
 }
 
-module.exports = { readFileContact, findContact };
+// fungsi untuk menuliskan data ke file contacts.json
+const saveContacts = (contacts) => {
+  fs.writeFileSync(filePath, JSON.stringify(contacts, null, 2), "utf8");
+};
+
+// fungsi untuk menambahkan contact baru
+function addContact(contact) {
+  const contacts = readFileContact();
+  contacts.push(contact);
+  saveContacts(contacts);
+}
+
+// fungsi untuk cek duplikasi nama contact
+function cekDuplikat(nama) {
+  const contacts = readFileContact();
+  return contacts.find((contact) => contact.nama === nama);
+}
+
+module.exports = { readFileContact, findContact, addContact, cekDuplikat };

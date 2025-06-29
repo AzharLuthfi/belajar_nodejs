@@ -4,5 +4,24 @@
     "nohp": "08123456789",
     "email": "azhar@gmail.com"
   },
-  { "nama": "Budi", "nohp": "08123846789", "email": "budi@gmail.com" }
+  {
+    "nama": "Budi",
+    "nohp": "08123846789",
+    "email": "budi@gmail.com"
+  },
+  {
+    "nama": "Agus",
+    "email": "agus@gmail.com",
+    "nohp": "081635287594"
+  },
+  {
+    "nama": "caca",
+    "email": "caca@gmail.com",
+    "nohp": "081234567890"
+  },
+  {
+    "nama": "Doddy",
+    "email": "Doddy@gmail.com",
+    "nohp": "081157464273"
+  }
 ]

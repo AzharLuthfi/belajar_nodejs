@@ -1,7 +1,17 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
-const { readFileContact, findContact } = require("./utils/contacts");
+const {
+  readFileContact,
+  findContact,
+  addContact,
+  cekDuplikat,
+} = require("./utils/contacts");
 const path = require("path");
+const { body, validationResult, check } = require("express-validator");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
+
 const app = express();
 const port = 3000;
 
@@ -10,11 +20,21 @@ app.set("view engine", "ejs"); // secara default kita harus menyimpan file ejs d
 app.set("views", path.join(__dirname, "views")); // path ke direktori views
 app.set("layout", "main-layout");
 
-// thrid party middleware
-app.use(expressLayouts);
+app.use(expressLayouts); // thrid party middleware
+app.use(express.static(path.join(__dirname, "public"))); // build in middleware
+app.use(express.urlencoded({ extended: true })); // kalo bekerja dengan post harus pake middleware ini
 
-// build in middleware
-app.use(express.static(path.join(__dirname, "public")));
+// konfigurasi
+app.use(cookieParser("secret"));
+app.use(
+  session({
+    cookie: { maxAge: 6000 },
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(flash());
 
 app.get("/", (req, res) => {
   // dia akan otomatis nyari index.ejs di direktori views
@@ -46,8 +66,49 @@ app.get("/contact", (req, res) => {
     layout: "layouts/main-layout",
     title: "Halaman Contact",
     contacts,
+    msg: req.flash("msg"),
   });
 });
+
+// halaman form tambah data
+app.get("/contact/add", (req, res) => {
+  res.render("add-contact", {
+    title: "Halaman Tambah Data",
+    layout: "layouts/main-layout",
+  });
+});
+
+// proses tambah data contact
+app.post(
+  "/contact",
+  [
+    check("email", "Email Tidak Valid!").isEmail(),
+    check("nohp", "No HP Tidak Valid!").isMobilePhone("id-ID"),
+    body("nama").custom((value) => {
+      const duplikat = cekDuplikat(value);
+      if (duplikat) {
+        throw new Error("Nama Contact Sudah Digunakan!");
+      }
+      return true;
+    }),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // return res.status(422).json({ errors: errors.array() });
+      res.render("add-contact", {
+        title: "Halaman Tambah Data",
+        layout: "layouts/main-layout",
+        errors: errors.array(),
+      });
+    } else {
+      addContact(req.body);
+      // add flash massage
+      req.flash("msg", "Data Contact Berhasil Ditambahkan!");
+      res.redirect("/contact"); // kalo sudah arahkan ke halaman contact
+    }
+  }
+);
 
 // halaman detail contact
 app.get("/contact/:nama", (req, res) => {
