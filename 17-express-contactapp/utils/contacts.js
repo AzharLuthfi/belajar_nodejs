@@ -45,4 +45,39 @@ function cekDuplikat(nama) {
   return contacts.find((contact) => contact.nama === nama);
 }
 
-module.exports = { readFileContact, findContact, addContact, cekDuplikat };
+// fungsi untuk menghapus contact
+function deleteContact(nama) {
+  const contacts = readFileContact();
+  const filtered = contacts.filter((contact) => contact.nama !== nama); // ini akan berisi array data selain nama yg akan di hapus
+  saveContacts(filtered);
+}
+
+// fungsi untuk mengedit contact TANPA mengubah urutan
+function editContact(newContact) {
+  const contacts = readFileContact();
+
+  // cari index berdasarkan oldNama
+  const index = contacts.findIndex(
+    (contact) => contact.nama === newContact.oldNama
+  );
+
+  if (index !== -1) {
+    // hapus properti oldNama agar tidak ikut disimpan
+    delete newContact.oldNama;
+
+    // update langsung pada posisi index
+    contacts[index] = newContact;
+
+    // simpan kembali ke file
+    saveContacts(contacts);
+  }
+}
+
+module.exports = {
+  readFileContact,
+  findContact,
+  addContact,
+  cekDuplikat,
+  deleteContact,
+  editContact,
+};
